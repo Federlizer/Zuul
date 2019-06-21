@@ -1,0 +1,11 @@
+{
+  "name": "zuul-game",
+  "version": "1.0.0",
+  "description": "The game files for Zuul",
+  "main": "./build/index.js",
+  "scripts": {
+    "build": "rm ./build/*.js && tsc"
+  },
+  "author": "Federlizer",
+  "license": "MIT"
+}
