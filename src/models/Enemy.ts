@@ -1,4 +1,5 @@
 import IEntity from './IEntity';
+import BattleAction from './BattleAction';
 
 class Enemy implements IEntity {
     name: string;
@@ -29,6 +30,10 @@ class Enemy implements IEntity {
             this.currentHealth = this.maxHealth;
         else
             this.currentHealth += amount;
+    }
+
+    getAction(): BattleAction {
+        return BattleAction.Attack;
     }
 }
 

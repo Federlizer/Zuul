@@ -1,3 +1,5 @@
+import BattleAction from "./BattleAction";
+
 // Entity is an interface that describes an entity in the game.
 // An entity would for example be the player or some of the enemies
 // they have to kill to get through the game.
@@ -10,6 +12,7 @@ interface IEntity {
     takeDamage(amount: number): boolean;
     heal(amount: number): void;
     dealDamage(): number;
+    getAction(): BattleAction;
 }
 
 export default IEntity;

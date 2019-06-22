@@ -4,8 +4,12 @@
   "description": "The game files for Zuul",
   "main": "./build/index.js",
   "scripts": {
-    "build": "rm ./build/*.js && tsc"
+    "build": "rm -r ./build/* && tsc",
+    "start": "rm -r ./build/* && tsc && node ./build/index.js"
   },
   "author": "Federlizer",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^12.0.10"
+  }
 }

@@ -1,4 +1,5 @@
 import IEntity from './IEntity';
+import BattleAction from './BattleAction';
 
 class Player implements IEntity {
     name: string;
@@ -33,6 +34,10 @@ class Player implements IEntity {
 
     someWeirdFunction(): number {
         return 99;
+    }
+
+    getAction(): BattleAction {
+        return BattleAction.Attack;
     }
 }
 
