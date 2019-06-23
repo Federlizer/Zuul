@@ -4,8 +4,8 @@
   "description": "The game files for Zuul",
   "main": "./build/index.js",
   "scripts": {
-    "build": "rm -r ./build/* && tsc",
-    "start": "rm -r ./build/* && tsc && node ./build/index.js"
+    "build": "rm ./build/*.js && tsc",
+    "run": "rm ./build/*.js && tsc && node ./build/index.js"
   },
   "author": "Federlizer",
   "license": "MIT",
