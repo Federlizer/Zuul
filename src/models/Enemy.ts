@@ -32,8 +32,10 @@ class Enemy implements IEntity {
             this.currentHealth += amount;
     }
 
-    getAction(): BattleAction {
-        return BattleAction.Attack;
+    async getAction(): Promise<BattleAction> {
+        return new Promise((resolve, _) => {
+            resolve(BattleAction.Attack);
+        })
     }
 }
 

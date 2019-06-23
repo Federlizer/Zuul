@@ -37,7 +37,7 @@ class Battle {
         );
     }
 
-    startBattle() {
+    async startBattle() {
         let battling = true;
         let entityOneTurn = true;
         let playingEntity = this.entityOne;
@@ -49,7 +49,8 @@ class Battle {
             
             // Get entity action
             console.log(`${playingEntity.name}'s turn.`)
-            const action = playingEntity.getAction();
+
+            const action = await playingEntity.getAction();
             let entityPlayed = false;
 
             // Resolve entity action

@@ -12,7 +12,7 @@ interface IEntity {
     takeDamage(amount: number): boolean;
     heal(amount: number): void;
     dealDamage(): number;
-    getAction(): BattleAction;
+    getAction(): Promise<BattleAction>;
 }
 
 export default IEntity;

@@ -1,3 +1,5 @@
+import readline from 'readline';
+
 import IEntity from './IEntity';
 import BattleAction from './BattleAction';
 
@@ -32,12 +34,28 @@ class Player implements IEntity {
         return this.baseDamage;
     }
 
-    someWeirdFunction(): number {
-        return 99;
-    }
-
-    getAction(): BattleAction {
-        return BattleAction.Attack;
+    async getAction(): Promise<BattleAction> {
+        return new Promise((resolve, _) => {
+            const prompt = readline.createInterface({
+                input: process.stdin,
+                output: process.stdout,
+            });
+    
+            prompt.question("What do you want to do? ", (answer) => {
+                prompt.close();
+    
+                switch (answer) {
+                    case 'attack':
+                        resolve(BattleAction.Attack);
+                        break;
+                    case 'heal':
+                        resolve(BattleAction.Heal);
+                        break;
+                    default:
+                        resolve(BattleAction.NoAction);
+                }
+            });
+        });
     }
 }
 
