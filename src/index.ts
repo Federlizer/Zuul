@@ -67,8 +67,8 @@ class Game {
 
     battle() {
         const field: Room = new Room("Field", "The arena the two are to fight in");
-        let player: IEntity = new Player("Federlizer", 50, 10, field);
-        let alien: IEntity = new Enemy("Alien", 20, 5, field);
+        let player: Entity = new Player("Federlizer", 50, 10, field);
+        let alien: Entity = new Enemy("Alien", 20, 5, field);
 
         let battle: Battle = new Battle(player, alien);
         battle.startBattle()

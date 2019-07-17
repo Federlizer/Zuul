@@ -32,7 +32,8 @@ export const execute = (command: Command, receiver: Player) => {
         case 'help':
             return console.log("You can't get help, fuck you!");
         default:
-            return console.log(`Command error.\n${command}`);
+            console.log('Command error.');
+            return console.log(command);
     }
 }
 
