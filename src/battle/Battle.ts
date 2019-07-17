@@ -1,4 +1,4 @@
-import IEntity from '../models/IEntity';
+import IEntity from '../models/Entity';
 import BattleAction from './BattleAction';
 
 class Battle {

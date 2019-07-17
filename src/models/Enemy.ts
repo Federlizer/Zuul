@@ -1,56 +1,29 @@
-import IEntity from './IEntity';
-import BattleAction from '../battle/BattleAction';
+import Entity from "./Entity";
 import Room from './Room';
+import BattleAction from '../battle/BattleAction';
 
-class Enemy implements IEntity {
-    name: string;
-    currentHealth: number;
-    maxHealth: number;
-    baseDamage: number;
-    currentRoom: Room;
-    armor: number;
+class Enemy extends Entity {
 
-    constructor(name: string, health: number, baseDamage: number, startingRoom: Room) {
-        this.name = name;
-        this.currentHealth = health;
-        this.maxHealth = health;
-        this.baseDamage = baseDamage;
-        this.currentRoom = startingRoom;
-        this.armor = 0;
-    }
+  constructor(
+    name: string,
+    health: number,
+    baseDamage: number,
+    startingRoom: Room,
+  ) {
+    super(name, baseDamage, startingRoom, health, 0);
+  }
 
-    takeDamage(amount: number): boolean {
-        this.currentHealth -= amount;
-        if (this.currentHealth <= 0)
-            return true;
-        return false;
-    }
+  async getAction(): Promise<BattleAction> {
+    return new Promise((resolve, _) => {
+      resolve(BattleAction.Attack);
+    })
+  }
 
-    dealDamage(): number {
-        return this.baseDamage;
-    }
-
-    heal(amount: number): void {
-        if (this.currentHealth + amount > this.maxHealth)
-            this.currentHealth = this.maxHealth;
-        else
-            this.currentHealth += amount;
-    }
-
-    async getAction(): Promise<BattleAction> {
-        return new Promise((resolve, _) => {
-            resolve(BattleAction.Attack);
-        })
-    }
-
-    move(direction: string) {
-        const newRoom: Room | undefined = this.currentRoom.getRoom(direction);
-        if (newRoom) {
-            this.currentRoom = newRoom
-        } else {
-            console.log(`An error occurred while an Enemy was trying to invoke it's move method. The new room has the following info:\n ${newRoom}`);
-        }
-    }
+  async getInput(): Promise<string> {
+    return new Promise((resolve, _) => {
+      resolve('');
+    })
+  }
 }
 
 export default Enemy;

@@ -1,13 +1,13 @@
 import uuid from 'uuid/v4';
 
 import Player from './models/Player';
-import Enemy from './models/Enemy';
-import IEntity from './models/IEntity';
+import Entity from './models/Entity';
 import Battle from './battle/Battle';
 import Room from './models/Room';
 import Item, { ItemType } from './models/Item';
 
 import commander from './commander';
+import Enemy from './models/Enemy';
 
 // TODO: use inputFunction and outputFunction for I/O
 // Check it when the game get's initialized and then pass around the funtions that are to be used.
