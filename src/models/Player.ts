@@ -52,6 +52,21 @@ class Player implements IEntity {
         return this.baseDamage;
     }
 
+    async getInput(): Promise<string> {
+        return new Promise((resolve, _) => {
+            const prompt = readline.createInterface({
+                input: process.stdin,
+                output: process.stdout,
+            });
+
+            prompt.question("> ", (answer) => {
+                prompt.close()
+
+                resolve(answer);
+            })
+        })
+    }
+
     async getAction(): Promise<BattleAction> {
         return new Promise((resolve, _) => {
             const prompt = readline.createInterface({
@@ -59,7 +74,7 @@ class Player implements IEntity {
                 output: process.stdout,
             });
 
-            prompt.question("What do you want to do? ", (answer) => {
+            prompt.question("> ", (answer) => {
                 prompt.close();
 
                 switch (answer) {
@@ -91,6 +106,7 @@ class Player implements IEntity {
     }
 
     equip(itemID: string): boolean {
+        let equipped = false;
         this.inventory.map((item) => {
             if (item.id === itemID) {
                 if (!item.equipable) {
@@ -102,19 +118,26 @@ class Player implements IEntity {
                     case ItemType.Weapon:
                         console.log(`Equipped ${item.name}.`);
                         this.equippedWeapon = item;
-                        return true;
+                        equipped = true;
+                        break;
                     case ItemType.Armor:
                         console.log(`Equipped ${item.name}.`);
                         this.armor = item.power;
-                        return true;
+                        equipped = true;
+                        break;
                     default:
                         console.log(`Unknown item type ${item.type}.`);
-                        return false;
+                        equipped = false;
+                        break;
                 }
             }
         })
-        console.log(`Item with ID ${itemID} wasn't found.`);
-        return false;
+        if (equipped) {
+            return true;
+        } else {
+            console.log(`Item with ID ${itemID} wasn't found.`);
+            return false;
+        }
     }
 
     use(itemID: string): boolean {

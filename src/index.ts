@@ -7,11 +7,64 @@ import Battle from './battle/Battle';
 import Room from './models/Room';
 import Item, { ItemType } from './models/Item';
 
+import commander from './commander';
+
 // TODO: use inputFunction and outputFunction for I/O
 // Check it when the game get's initialized and then pass around the funtions that are to be used.
 // Default should be console.log() and the read function for JS, i'm not sure what it is, but yeah.
 
 class Game {
+    player: Player;
+
+    constructor() {
+        const entrance = new Room('Entrance', 'The entrance of the building.');
+        const bathroom = new Room('Bathroom', 'A simple bathroom with a sink and a toilet');
+        const arena = new Room('Arena', 'An arena filled with a crowd and an enemy waiting for you at the other end.');
+
+        const sword = new Item(uuid(), 'Sword', 10, true, ItemType.Weapon);
+        const armor = new Item(uuid(), 'Armor', 10, true, ItemType.Armor);
+        bathroom.addItems(sword, armor);
+
+        entrance.addExit({
+            direction: 'west',
+            room: bathroom,
+        })
+
+        bathroom.addExit({
+            direction: 'east',
+            room: entrance,
+        })
+        bathroom.addExit({
+            direction: 'west',
+            room: arena,
+        })
+
+        arena.addExit({
+            direction: 'east',
+            room: bathroom,
+        })
+
+        const player = new Player('Federlizer', 100, 5, entrance);
+        const enemy = new Enemy('Enemy', 100, 5, arena);
+
+        this.player = player;
+    }
+
+    async start() {
+        while (true) {
+            const input = await this.player.getInput()
+            if (input === 'quit') {
+                return;
+            }
+            const command = commander.parse(input);
+            if (command !== null) {
+                commander.execute(command, this.player);
+            } else {
+                console.log("Command unknown. Type help for help.");
+            }
+        }
+    }
+
     battle() {
         const field: Room = new Room("Field", "The arena the two are to fight in");
         let player: IEntity = new Player("Federlizer", 50, 10, field);
@@ -22,61 +75,7 @@ class Game {
             .then(() => console.log('The battle ended'))
             .catch((err) => console.error(err));
     }
-
-    rooms() {
-        const entrance: Room = new Room("Entrance", "It's the entrance to the room");
-        const medbay: Room = new Room("MedBay", "The medical bay where people are healed... duh...");
-
-        entrance.addExit({
-            direction: 'north',
-            room: medbay,
-        })
-
-        medbay.addExit({
-            direction: 'south',
-            room: entrance,
-        })
-        
-        const player: IEntity = new Player("Federlizer", 10, 1, entrance);
-        player.move('north');
-        player.move('south');
-    }
-
-    items() {
-        const arena: Room = new Room('Arena', 'A battle arena');
-        const sword: Item = new Item(uuid(), 'Sword', 10, true, ItemType.Weapon);
-        const armor: Item = new Item(uuid(), 'Armor', 10, true, ItemType.Armor);
-
-        const player = new Player('Federlizer', 100, 10, arena);
-        player.takeItem(sword);
-        player.takeItem(armor);
-
-        player.equip(sword.id);
-        player.equip(armor.id);
-
-        console.log(player.inventory);
-        console.log(`${player.name} dealt ${player.dealDamage()} damage`);
-
-        player.takeDamage(20);
-
-        console.log(`${player.name} has ${player.currentHealth} HP.`)
-
-    }
-
-    room_items() {
-        const arena: Room = new Room('Arena', 'A battle arena');
-        const sword: Item = new Item(uuid(), 'Sword', 10, true, ItemType.Weapon);
-        const armor: Item = new Item(uuid(), 'Armor', 10, true, ItemType.Armor);
-
-        arena.addItems(sword, armor);
-
-        console.log(arena.items);
-        let item = arena.takeItem(uuid());
-
-        console.log(item);
-        console.log(arena.items);
-    }
 }
 
 const game = new Game();
-game.room_items();
+game.start();

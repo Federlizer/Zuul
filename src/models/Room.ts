@@ -31,15 +31,20 @@ class Room {
         }
     }
 
+    //TODO
+    getDescription(): string {
+        return '';
+    }
+
     addItems(...items: Array<Item>) {
         this.items = [...this.items, ...items];
     }
 
-    takeItem(itemID: string): (Item | null) {
+    takeItem(itemName: string): (Item | null) {
         let rv: Item | null = null;
 
         this.items = this.items.filter((item) => {
-            if (item.id === itemID) {
+            if (item.name === itemName) {
                 rv = item;
                 return false;
             } else {
