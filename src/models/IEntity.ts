@@ -6,15 +6,22 @@ import Room from "./Room";
 // they have to kill to get through the game.
 interface IEntity {
     name: string;
+
+    baseDamage: number;
+
+    currentRoom: Room;
+
     currentHealth: number;
     maxHealth: number;
-    baseDamage: number;
-    currentRoom: Room;
+    
+    armor: number;
 
     takeDamage(amount: number): boolean;
     heal(amount: number): void;
     dealDamage(): number;
+    
     getAction(): Promise<BattleAction>;
+
     move(direction: string): void;
 }
 

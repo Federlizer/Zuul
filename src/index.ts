@@ -1,9 +1,11 @@
+import uuid from 'uuid/v4';
+
 import Player from './models/Player';
 import Enemy from './models/Enemy';
 import IEntity from './models/IEntity';
 import Battle from './battle/Battle';
 import Room from './models/Room';
-import Item from './models/Item';
+import Item, { ItemType } from './models/Item';
 
 // TODO: use inputFunction and outputFunction for I/O
 // Check it when the game get's initialized and then pass around the funtions that are to be used.
@@ -39,7 +41,28 @@ class Game {
         player.move('north');
         player.move('south');
     }
+
+    items() {
+        const arena: Room = new Room('Arena', 'A battle arena');
+        const sword: Item = new Item(uuid(), 'Sword', 10, true, ItemType.Weapon);
+        const armor: Item = new Item(uuid(), 'Armor', 10, true, ItemType.Armor);
+
+        const player = new Player('Federlizer', 100, 10, arena);
+        player.takeItem(sword);
+        player.takeItem(armor);
+
+        player.equip(sword.id);
+        player.equip(armor.id);
+
+        console.log(player.inventory);
+        console.log(`${player.name} dealt ${player.dealDamage()} damage`);
+
+        player.takeDamage(20);
+
+        console.log(`${player.name} has ${player.currentHealth} HP.`)
+
+    }
 }
 
 const game = new Game();
-game.rooms();
+game.items();

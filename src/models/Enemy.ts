@@ -8,6 +8,7 @@ class Enemy implements IEntity {
     maxHealth: number;
     baseDamage: number;
     currentRoom: Room;
+    armor: number;
 
     constructor(name: string, health: number, baseDamage: number, startingRoom: Room) {
         this.name = name;
@@ -15,6 +16,7 @@ class Enemy implements IEntity {
         this.maxHealth = health;
         this.baseDamage = baseDamage;
         this.currentRoom = startingRoom;
+        this.armor = 0;
     }
 
     takeDamage(amount: number): boolean {
