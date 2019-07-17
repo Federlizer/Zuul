@@ -1,19 +1,22 @@
 import readline from 'readline';
 
 import IEntity from './IEntity';
-import BattleAction from './BattleAction';
+import BattleAction from '../battle/BattleAction';
+import Room from './Room';
 
 class Player implements IEntity {
     name: string;
     currentHealth: number;
     maxHealth: number;
     baseDamage: number;
+    currentRoom: Room;
 
-    constructor(name: string, health: number, baseDamage: number) {
+    constructor(name: string, health: number, baseDamage: number, startingRoom: Room) {
         this.name = name;
         this.currentHealth = health;
         this.maxHealth = health;
         this.baseDamage = baseDamage;
+        this.currentRoom = startingRoom;
     }
 
     takeDamage(amount: number): boolean {
@@ -56,6 +59,16 @@ class Player implements IEntity {
                 }
             });
         });
+    }    
+    
+    move(direction: string) {
+        const newRoom: Room | undefined = this.currentRoom.getRoom(direction);
+        if (newRoom) {
+            this.currentRoom = newRoom
+            console.log(`You've moved to ${this.currentRoom.name}`)
+        } else {
+            console.log('You can\'t go there');
+        }
     }
 }
 
