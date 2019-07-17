@@ -35,10 +35,29 @@ class Room {
         this.items = [...this.items, ...items];
     }
 
+    takeItem(itemID: string): (Item | null) {
+        let rv: Item | null = null;
+
+        this.items = this.items.filter((item) => {
+            if (item.id === itemID) {
+                rv = item;
+                return false;
+            } else {
+                return true;
+            }
+        })
+
+        return rv;
+    }
+
     addExit(exit: RoomExit) {
         this.exits[exit.direction] = exit.room
     }
 
+    /**
+     * getRoom returns a Room which corresponds to the given direction.
+     * @param direction The direction ('north', 'south', 'east', 'west')
+     */
     getRoom(direction: string) {
         return this.exits[direction]
     }

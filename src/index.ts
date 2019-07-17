@@ -62,7 +62,21 @@ class Game {
         console.log(`${player.name} has ${player.currentHealth} HP.`)
 
     }
+
+    room_items() {
+        const arena: Room = new Room('Arena', 'A battle arena');
+        const sword: Item = new Item(uuid(), 'Sword', 10, true, ItemType.Weapon);
+        const armor: Item = new Item(uuid(), 'Armor', 10, true, ItemType.Armor);
+
+        arena.addItems(sword, armor);
+
+        console.log(arena.items);
+        let item = arena.takeItem(uuid());
+
+        console.log(item);
+        console.log(arena.items);
+    }
 }
 
 const game = new Game();
-game.items();
+game.room_items();
