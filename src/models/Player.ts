@@ -24,14 +24,16 @@ class Player extends Entity {
         return base;
     }
 
-    async getInput(): Promise<string> {
+    async getInput(questionPrompt?: string): Promise<string> {
         return new Promise((resolve, _) => {
             const prompt = readline.createInterface({
                 input: process.stdin,
                 output: process.stdout,
             });
 
-            prompt.question("> ", (answer) => {
+            const question = (questionPrompt) ? questionPrompt : ">";
+
+            prompt.question(question, (answer) => {
                 prompt.close()
 
                 resolve(answer);
@@ -39,14 +41,16 @@ class Player extends Entity {
         })
     }
 
-    async getAction(): Promise<BattleAction> {
+    async getAction(questionPrompt?: string): Promise<BattleAction> {
         return new Promise((resolve, _) => {
             const prompt = readline.createInterface({
                 input: process.stdin,
                 output: process.stdout,
             });
 
-            prompt.question("> ", (answer) => {
+            const question = (questionPrompt) ? questionPrompt : ">";
+
+            prompt.question(question, (answer) => {
                 prompt.close();
 
                 switch (answer) {

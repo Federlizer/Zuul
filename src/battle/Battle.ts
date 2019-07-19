@@ -50,7 +50,7 @@ class Battle {
             // Get entity action
             console.log(`${playingEntity.name}'s turn.`)
 
-            const action = await playingEntity.getAction();
+            const action = await playingEntity.getAction('battle prompt: > ');
             let entityPlayed = false;
 
             // Resolve entity action

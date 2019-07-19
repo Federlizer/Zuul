@@ -1,15 +1,22 @@
 import Item from './Item';
+import Entity from './Entity';
 
 interface RoomExits {
     north: Room | undefined
     west: Room | undefined
     south: Room | undefined
     east: Room | undefined
+
+    northwest: Room | undefined
+    northeast: Room | undefined
+    southwest: Room | undefined
+    southeast: Room | undefined
+
     [direction: string]: Room | undefined
 }
 
 interface RoomExit {
-    direction: 'north' | 'west' | 'south' | 'east'
+    direction: 'north' | 'west' | 'south' | 'east' | 'northwest' | 'northeast' | 'southwest' | 'southeast'
     room: Room
 }
 
@@ -18,22 +25,39 @@ class Room {
     description: string
     items: Array<Item>
     exits: RoomExits
-    
+    entities: Array<Entity>
+
     constructor(name: string, description: string) {
         this.name = name;
         this.description = description;
         this.items = [];
+        this.entities = [];
         this.exits = {
             north: undefined,
             west: undefined,
             south: undefined,
             east: undefined,
+            northwest: undefined,
+            northeast: undefined,
+            southwest: undefined,
+            southeast: undefined,
         }
     }
 
-    //TODO
     getDescription(): string {
-        return '';
+        return `${this.name}: ${this.description}`;
+    }
+
+    entityEnteredRoom(entity: Entity) {
+        this.entities = [...this.entities, entity];
+    }
+
+    entityExitedRoom(entity: Entity) {
+        this.entities = this.entities.filter((e) => e.name !== entity.name);
+    }
+
+    hasOtherEntity(self: Entity): Entity | undefined {
+        return this.entities.find((entity) => self.name !== entity.name);
     }
 
     addItems(...items: Array<Item>) {

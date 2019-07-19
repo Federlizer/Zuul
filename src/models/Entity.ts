@@ -1,5 +1,6 @@
 import BattleAction from "../battle/BattleAction";
 import Room from "./Room";
+import Battle from "../battle/Battle";
 
 abstract class Entity {
     name: string;
@@ -22,16 +23,20 @@ abstract class Entity {
         this.currentHealth = health;
         this.maxHealth = health;
         this.armor = armor;
+
+        this.currentRoom.entityEnteredRoom(this);
     }
 
-    abstract async getAction(): Promise<BattleAction>;
-    abstract async getInput(): Promise<string>;
+    abstract async getAction(prompt?: string): Promise<BattleAction>;
+    abstract async getInput(prompt?: string): Promise<string>;
 
     move(direction: string): boolean {
         const newRoom: Room | undefined = this.currentRoom.getRoom(direction);
 
         if (newRoom) {
             this.currentRoom = newRoom
+            this.currentRoom.entityEnteredRoom(this);
+            
             return true;
         }
         return false;

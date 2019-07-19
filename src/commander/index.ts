@@ -11,10 +11,16 @@ export const parse = (text: string): (Command | null) => {
 export const execute = (command: Command, receiver: Player) => {
     switch (command.action) {
         case 'go':
-            return receiver.move(command.args[0]);
+            const success = receiver.move(command.args[0]);
+            if (success) {
+                return console.log(`You have entered a new room.\n${receiver.currentRoom.getDescription()}`);
+            } else {
+                return console.log(`You can't go there. Please try another one.`);
+            }
         case 'look':
-            return console.log(`${receiver.currentRoom.name}\n` +
-                `${receiver.currentRoom.description}`);
+            const text = `You are in ${receiver.currentRoom.name}.\n` +
+                `${receiver.currentRoom.description}`;
+            return console.log(text);
         case 'take':
             const item = receiver.currentRoom.takeItem(command.args[0]);
             if (item)
