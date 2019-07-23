@@ -48,11 +48,10 @@ class Game {
                         await battle.startBattle();
                     }
                 }
+                this.turnsTaken += 1;
             } else {
                 console.log("Command unknown. Type help for help.");
             }
-
-            this.turnsTaken += 1;
         }
         console.log('Congratulations, you have completed all the objectives required from you. You can go home now. :)');
     }

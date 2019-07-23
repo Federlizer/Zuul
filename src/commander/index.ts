@@ -1,9 +1,14 @@
 import Command from '../models/Command';
 import Player from '../models/Player';
 
+const actions = ['go', 'look', 'take', 'equip', 'inventory', 'help'];
+
 export const parse = (text: string): (Command | null) => {
     const action = text.split(' ')[0];
     const args = text.split(' ').slice(1);
+
+    if (!actions.find((a) => action === a))
+        return null;
 
     return new Command(action, args);
 }
@@ -36,7 +41,7 @@ export const execute = (command: Command, receiver: Player) => {
         case 'inventory':
             return console.log(receiver.inventory);
         case 'help':
-            return console.log("You can't get help, fuck you!");
+            return console.log("No help for now... Maybe later?");
         default:
             console.log('Command error.');
             return console.log(command);
