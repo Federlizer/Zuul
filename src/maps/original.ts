@@ -5,15 +5,43 @@ import uuid from 'uuid/v4';
 import Enemy from "../models/Enemy";
 
 // Rooms
-const entrance = new Room('Entrance', 'The entrance of the spaceship.');
-const escapePod = new Room('Escape Pod', 'Your goal is right in front of you. You see a shining, golden escape pod!');
-const storageRoom = new Room('Storage Room', 'The storage room is a simple storage room. You can see a bunch of crates full of food and supplies.');
-const airlock = new Room('Airlock', 'You are in the airlock. Nothing too interesting to see here');
-const lab = new Room('Lab', 'This is the laboratory on the ship. You can see a few medical stations around accompanied by a lot of chemical flasks.');
-const livingQuarters = new Room('Living Quarters', 'It is a simple room, filled with entertainment systems.');
-const controlCenter = new Room('Control Center', 'You are in the control center. There are a bunch of computers around');
-const lifeSupportCenter = new Room('Life Support Center', 'A simple life support room. A bunch of oxygen tanks, all running smoothly. For now...');
-const medbay = new Room('Medbay', 'This is the medical bay. You can see so many medical components.');
+const entrance = new Room(
+    'Entrance',
+    'The entrance of the spaceship.'
+);
+const escapePod = new Room(
+    'Escape Pod',
+    'Your goal is right in front of you. You see a shining, golden escape pod!'
+);
+const storageRoom = new Room(
+    'Storage Room',
+    'The storage room is a simple storage room. You can see a bunch of crates full of food and supplies.'
+);
+const airlock = new Room(
+    'Airlock',
+    'You are in the airlock. Nothing too interesting to see here'
+);
+const lab = new Room(
+    'Lab',
+    'This is the laboratory on the ship. You can see a ' + 
+        'few medical stations around accompanied by a lot of chemical flasks.'
+);
+const livingQuarters = new Room(
+    'Living Quarters',
+    'It is a simple room, filled with entertainment systems.'
+);
+const controlCenter = new Room(
+    'Control Center',
+    'You are in the control center. There are a bunch of computers around'
+);
+const lifeSupportCenter = new Room(
+    'Life Support Center',
+    'A simple life support room. A bunch of oxygen tanks, all running smoothly. For now...'
+);
+const medbay = new Room(
+    'Medbay',
+    'This is the medical bay. You can see so many medical components.'
+);
 
 // Room structure
 entrance.addExit({ direction: 'south', room: lifeSupportCenter });
