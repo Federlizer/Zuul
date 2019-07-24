@@ -25,13 +25,11 @@ class Room {
     description: string
     items: Array<Item>
     exits: RoomExits
-    entities: Array<Entity>
 
     constructor(name: string, description: string) {
         this.name = name;
         this.description = description;
         this.items = [];
-        this.entities = [];
         this.exits = {
             north: undefined,
             west: undefined,
@@ -46,18 +44,6 @@ class Room {
 
     getDescription(): string {
         return `${this.name}: ${this.description}`;
-    }
-
-    entityEnteredRoom(entity: Entity) {
-        this.entities = [...this.entities, entity];
-    }
-
-    entityExitedRoom(entity: Entity) {
-        this.entities = this.entities.filter((e) => e.name !== entity.name);
-    }
-
-    hasOtherEntity(self: Entity): Entity | undefined {
-        return this.entities.find((entity) => self.name !== entity.name);
     }
 
     addItems(...items: Array<Item>) {

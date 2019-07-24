@@ -3,6 +3,7 @@ import Room from "../models/Room";
 import Item, { ItemType } from "../models/Item";
 import uuid from 'uuid/v4';
 import Enemy from "../models/Enemy";
+import locator from '../controllers/locator';
 
 // Rooms
 const entrance = new Room(
@@ -92,19 +93,24 @@ medbay.addItems(medkit);
 lifeSupportCenter.addItems(bandage);
 lab.addItems(laserGun, nanoArmor);
 
-// Entitties
-const player = new Player('Federlizer', 100, 10, entrance);
+// Entities
+const player = new Player('Federlizer', 100, 10);
+locator.follow(player, entrance);
+
 let alienBoss: Enemy;
 let alien1: Enemy;
 let alien2: Enemy;
 
 // Break-in event
 function event(): string {
-  alienBoss = new Enemy('Alien Boss', 150, 15, escapePod);
+  alienBoss = new Enemy('Alien Boss', 150, 15);
 
-  alien1 = new Enemy('Alien 1', 50, 5, medbay);
-  alien2 = new Enemy('Alien 2', 50, 5, lab);
+  alien1 = new Enemy('Alien 1', 50, 5);
+  alien2 = new Enemy('Alien 2', 50, 5);
 
+  locator.follow(alienBoss, escapePod);
+  locator.follow(alien1, medbay);
+  locator.follow(alien2, lab);
   return `Three aliens just broke into the ship! Hurry!`;
 }
 
@@ -114,7 +120,12 @@ function isObjectiveCompleted(): boolean {
     return false;
   }
 
-  if ((alienBoss.currentHealth > 0) || (player.currentRoom.name !== escapePod.name)) {
+    const currentRoom = locator.find(player.name);
+    if (!currentRoom) {
+        throw new Error('Player not being followed by locator')
+    }
+
+  if ((alienBoss.currentHealth > 0) || (currentRoom.name !== escapePod.name)) {
     return false;
   } else {
     return true;

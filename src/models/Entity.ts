@@ -1,46 +1,32 @@
 import BattleAction from "../battle/BattleAction";
 import Room from "./Room";
 import Battle from "../battle/Battle";
+import Item from './Item';
 
 abstract class Entity {
     name: string;
     baseDamage: number;
-    currentRoom: Room;
     currentHealth: number;
     maxHealth: number;
     armor: number
+    bag: Array<Item>;
 
     constructor(
         name: string,
         damage: number,
-        startingRoom: Room,
         health: number,
         armor: number
     ) {
         this.name = name;
         this.baseDamage = damage;
-        this.currentRoom = startingRoom;
         this.currentHealth = health;
         this.maxHealth = health;
         this.armor = armor;
-
-        this.currentRoom.entityEnteredRoom(this);
+        this.bag = [];
     }
 
     abstract async getAction(prompt?: string): Promise<BattleAction>;
     abstract async getInput(prompt?: string): Promise<string>;
-
-    move(direction: string): boolean {
-        const newRoom: Room | undefined = this.currentRoom.getRoom(direction);
-
-        if (newRoom) {
-            this.currentRoom = newRoom
-            this.currentRoom.entityEnteredRoom(this);
-            
-            return true;
-        }
-        return false;
-    }
 
     takeDamage(amount: number): boolean {
         if (this.armor <= 0) {
@@ -63,6 +49,10 @@ abstract class Entity {
             this.currentHealth = this.maxHealth;
         else
             this.currentHealth += amount;
+    }
+
+    takeItem(item: Item): void {
+        this.bag = [...this.bag, item];
     }
 }
 

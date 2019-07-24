@@ -6,13 +6,11 @@ import Room from './Room';
 import Item, { ItemType } from './Item';
 
 class Player extends Entity {
-    inventory: Array<Item>;
     equippedWeapon: Item | null;
 
-    constructor(name: string, health: number, baseDamage: number, startingRoom: Room) {
-        super(name, baseDamage, startingRoom, health, 0);
+    constructor(name: string, health: number, baseDamage: number) {
+        super(name, baseDamage, health, 0);
 
-        this.inventory = [];
         this.equippedWeapon = null;
     }
 
@@ -67,13 +65,9 @@ class Player extends Entity {
         });
     }
 
-    takeItem(item: Item) {
-        this.inventory = [...this.inventory, item];
-    }
-
     equip(itemID: string): boolean {
         let equipped = false;
-        this.inventory.map((item) => {
+        super.bag.map((item) => {
             if (item.id === itemID) {
                 if (!item.equipable) {
                     console.log('This item isn\'t equipable, try using it instead.');
@@ -107,7 +101,7 @@ class Player extends Entity {
     }
 
     use(itemID: string): boolean {
-        this.inventory.map((item) => {
+        super.bag.map((item) => {
             if (item.id === itemID) {
                 if (item.equipable) {
                     console.log('You can\'t use this item, try equipping it instead');

@@ -8,9 +8,8 @@ class Enemy extends Entity {
     name: string,
     health: number,
     baseDamage: number,
-    startingRoom: Room,
   ) {
-    super(name, baseDamage, startingRoom, health, 0);
+    super(name, baseDamage, health, 0);
   }
 
   async getAction(): Promise<BattleAction> {
