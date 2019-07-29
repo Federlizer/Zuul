@@ -1,48 +1,58 @@
 import Player from './models/Player';
-import Battle from './battle/Battle';
+import logger from './controllers/logger';
 
 import map from './maps/original';
 import { parseAndExecute } from './commands';
-
-// TODO: use inputFunction and outputFunction for I/O
-// Check it when the game get's initialized and then pass around the funtions that are to be used.
-// Default should be console.log() and the read function for JS, i'm not sure what it is, but yeah.
 
 class Game {
     player: Player;
     EXIT_GAME_VALUES: Array<string> = ['exit', 'quit', 'q'];
     turn: number;
+    playing: boolean;
 
-    constructor() {
+    constructor
+    (
+        sendOutputFunc?: (...output: Array<string>) => void
+    ) {
         this.player = map.player;
         this.turn = 0;
+        this.playing = false;
+
+        if (sendOutputFunc) {
+            logger.setOutput(sendOutputFunc);
+        }
     }
 
-    async start() {
-        console.log(map.intro);
+    start() {
+        this.playing = true;
+        logger.write(map.intro);
+    }
 
-        // Main game loop
-        while (!map.isObjectiveCompleted()) {
-            if (map.turnToActivateEvent === this.turn) {
-                console.log(map.event());
-            }
-            
-            const input = await this.player.getInput(`${this.turn}> `);
-            
-            // Exit if user wants to stop playing
-            if (this.EXIT_GAME_VALUES.find((value) => input === value)) {
-                return;
-            }
-
-            const executed = parseAndExecute(this.player, input);
-
-            if (executed)
-                this.turn += 1;
+    takeTurn(input: string): void {
+        if (!this.playing) {
+            logger.write('You haven\'t started the game yet. Please do that first.');
+            return;
         }
 
-        console.log('Congratulations, you have completed all the objectives required from you. You can go home now. :)');
+        if (map.turnToActivateEvent === this.turn) {
+            logger.write(map.event());
+        }
+
+        if (this.EXIT_GAME_VALUES.find((value) => input === value)) {
+            logger.write('Bye!');
+            return;
+        }
+
+        const executed = parseAndExecute(this.player, input);
+
+        if (executed)
+            this.turn += 1;
+
+        if (map.isObjectiveCompleted()) {
+            this.playing = false;
+            logger.write('You have won the game of Zuul. We hope you enjoyed the game.');
+        }
     }
 }
 
-const game = new Game();
-game.start();
+export default Game;

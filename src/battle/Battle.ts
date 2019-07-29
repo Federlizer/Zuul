@@ -1,5 +1,6 @@
 import IEntity from '../models/Entity';
 import BattleAction from './BattleAction';
+import logger from '../controllers/logger';
 
 class Battle {
     entityOne: IEntity;
@@ -45,23 +46,39 @@ class Battle {
         
         while(battling) {
             // Print battle info
-            console.log(this.battleInfo());
+            logger.write(this.battleInfo());
             
             // Get entity action
-            console.log(`${playingEntity.name}'s turn.`)
+            logger.write(`${playingEntity.name}'s turn.`)
 
-            const action = await playingEntity.getAction('battle prompt: > ');
+            const input = await logger.read('In battle> ');
+            let action: BattleAction | undefined;
+
+            switch (input) {
+                case 'attack':
+                    action = BattleAction.Attack;
+                    break;
+                case 'heal':
+                    action = BattleAction.Heal;
+                    break;
+                default:
+                    logger.write('Not a valid action, please try again...');
+            }
+
+            if (action === undefined)
+                continue;
+            
             let entityPlayed = false;
 
             // Resolve entity action
             switch (action) {
                 case BattleAction.Attack:
-                    console.log(`${playingEntity.name} will attack ${waitingEntity.name}`);
+                    logger.write(`${playingEntity.name} will attack ${waitingEntity.name}`);
                     const killed = this.executeAttackAction(playingEntity, waitingEntity);
                     entityPlayed = true;
                     if (killed) {
-                        console.log(`${waitingEntity.name} has died.`);
-                        console.log(`${playingEntity.name} has won the battle!`);
+                        logger.write(`${waitingEntity.name} has died.`);
+                        logger.write(`${playingEntity.name} has won the battle!`);
                         battling = false;
                     }
                     break;
@@ -72,7 +89,7 @@ class Battle {
                     break;
 
                 default:
-                    console.log('Not a valid action, please try again...');
+                    logger.write('Not a valid action, please try again...');
             }
 
             // Swap playing entity

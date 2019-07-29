@@ -2,7 +2,7 @@
   "name": "zuul-game",
   "version": "1.0.0",
   "description": "The game files for Zuul",
-  "main": "./build/index.js",
+  "main": "./bin/index.js",
   "scripts": {
     "build": "rm -r ./bin && tsc",
     "run": "rm -r ./bin && tsc && node ./bin/index.js"

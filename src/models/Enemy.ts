@@ -11,18 +11,6 @@ class Enemy extends Entity {
   ) {
     super(name, baseDamage, health, 0);
   }
-
-  async getAction(): Promise<BattleAction> {
-    return new Promise((resolve, _) => {
-      resolve(BattleAction.Attack);
-    })
-  }
-
-  async getInput(): Promise<string> {
-    return new Promise((resolve, _) => {
-      resolve('');
-    })
-  }
 }
 
 export default Enemy;

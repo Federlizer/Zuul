@@ -15,7 +15,7 @@ interface RoomExits {
     [direction: string]: Room | undefined
 }
 
-interface RoomExit {
+export interface RoomExit {
     direction: 'north' | 'west' | 'south' | 'east' | 'northwest' | 'northeast' | 'southwest' | 'southeast'
     room: Room
 }

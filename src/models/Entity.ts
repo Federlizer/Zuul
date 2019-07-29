@@ -25,9 +25,6 @@ abstract class Entity {
         this.bag = [];
     }
 
-    abstract async getAction(prompt?: string): Promise<BattleAction>;
-    abstract async getInput(prompt?: string): Promise<string>;
-
     takeDamage(amount: number): boolean {
         if (this.armor <= 0) {
             this.currentHealth -= amount;

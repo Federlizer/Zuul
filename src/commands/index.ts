@@ -2,6 +2,7 @@ import Item from '../models/Item';
 import Room from '../models/Room';
 import Entity from '../models/Entity';
 import locator from '../controllers/locator';
+import logger from '../controllers/logger';
 
 const HELP_GAP = 2;
 
@@ -19,7 +20,43 @@ const _examineItem = (item: Item): string => {
 
 const _examineRoom = (entity: Entity): string => {
     const currentRoom = locator.find(entity.name);
-    return currentRoom.getDescription();
+
+    // praise our lord and saviour, the any type
+    let items: Array<Item> = [];
+    let exits: Array<any> = [];
+
+    for (let direction in currentRoom.exits) {
+        const room = currentRoom.exits[direction];
+        if (!room) {
+            continue;
+        }
+        exits = [...exits, { direction , room }]
+    }
+
+
+    currentRoom.items.map((item) => {
+        items = [...items, item];
+    })
+
+    let rv = `${currentRoom.getDescription()} ` +
+        `There are ${exits.length} exits and ${items.length} items.\n`;
+
+    if (exits.length > 0) {
+        rv += 'Exits:\n'
+        exits.map((exit) => {
+            rv += `${exit.direction}: ${exit.room.name}\n`;
+        })
+    }
+
+    if (items.length > 0) {
+        rv += 'Items:\n'
+        items.map((item) => {
+            rv += `${item.name}`;
+        })
+    }
+
+
+    return rv;
 }
 
 export const go: Command = {
@@ -107,7 +144,6 @@ const commands: Array<Command> = [
 
 // equip ITEM
 // inventory
-// help [COMMAND]
 
 export const parseAndExecute = (callingEntity: Entity, text: string): boolean => {
     const command = text.split(' ')[0];
@@ -116,25 +152,32 @@ export const parseAndExecute = (callingEntity: Entity, text: string): boolean =>
     switch (command) {
         case 'go':
             go.execute(callingEntity, args[0]);
+            const roomName = locator.find(callingEntity.name).name;
+            logger.write(`You have entered ${roomName}`)
             break;
+            
         case 'examine':
             if (args.length === 0) {
-                console.log(examine.execute(callingEntity));
+                logger.write(examine.execute(callingEntity));
             } else {
                 throw new Error('Not implemented');
                 //TODO: find the item and pass it instead of undefined.
-                console.log(examine.execute(callingEntity, undefined));
+                logger.write(examine.execute(callingEntity, undefined));
             }
             break;
+
         case 'take':
             take.execute(callingEntity, args[0]);
             break;
+            
         case 'help':
-            console.log(help.execute());
+            logger.write(help.execute());
             break;
+            
         default:
-            console.log(`Unknown command: ${command}`)
+            logger.write(`Unknown command: ${command}`)
             return false;
+
     }
     return true;
 }

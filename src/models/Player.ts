@@ -1,9 +1,8 @@
-import readline from 'readline';
-
 import Entity from './Entity';
 import BattleAction from '../battle/BattleAction';
 import Room from './Room';
 import Item, { ItemType } from './Item';
+import logger from '../controllers/logger';
 
 class Player extends Entity {
     equippedWeapon: Item | null;
@@ -22,71 +21,28 @@ class Player extends Entity {
         return base;
     }
 
-    async getInput(questionPrompt?: string): Promise<string> {
-        return new Promise((resolve, _) => {
-            const prompt = readline.createInterface({
-                input: process.stdin,
-                output: process.stdout,
-            });
-
-            const question = (questionPrompt) ? questionPrompt : ">";
-
-            prompt.question(question, (answer) => {
-                prompt.close()
-
-                resolve(answer);
-            })
-        })
-    }
-
-    async getAction(questionPrompt?: string): Promise<BattleAction> {
-        return new Promise((resolve, _) => {
-            const prompt = readline.createInterface({
-                input: process.stdin,
-                output: process.stdout,
-            });
-
-            const question = (questionPrompt) ? questionPrompt : ">";
-
-            prompt.question(question, (answer) => {
-                prompt.close();
-
-                switch (answer) {
-                    case 'attack':
-                        resolve(BattleAction.Attack);
-                        break;
-                    case 'heal':
-                        resolve(BattleAction.Heal);
-                        break;
-                    default:
-                        resolve(BattleAction.NoAction);
-                }
-            });
-        });
-    }
-
     equip(itemID: string): boolean {
         let equipped = false;
         super.bag.map((item) => {
             if (item.id === itemID) {
                 if (!item.equipable) {
-                    console.log('This item isn\'t equipable, try using it instead.');
+                    logger.write('This item isn\'t equipable, try using it intead.')
                     return false;
                 }
 
                 switch (item.type) {
                     case ItemType.Weapon:
-                        console.log(`Equipped ${item.name}.`);
+                        logger.write(`Equipped ${item.name}.`);
                         this.equippedWeapon = item;
                         equipped = true;
                         break;
                     case ItemType.Armor:
-                        console.log(`Equipped ${item.name}.`);
+                        logger.write(`Equipped ${item.name}.`);
                         this.armor = item.power;
                         equipped = true;
                         break;
                     default:
-                        console.log(`Unknown item type ${item.type}.`);
+                        logger.write(`Unknown item type ${item.type}.`);
                         equipped = false;
                         break;
                 }
@@ -95,7 +51,7 @@ class Player extends Entity {
         if (equipped) {
             return true;
         } else {
-            console.log(`Item with ID ${itemID} wasn't found.`);
+            logger.write(`Item with ID ${itemID} wasn't found.`);
             return false;
         }
     }
@@ -104,7 +60,7 @@ class Player extends Entity {
         super.bag.map((item) => {
             if (item.id === itemID) {
                 if (item.equipable) {
-                    console.log('You can\'t use this item, try equipping it instead');
+                    logger.write('You can\'t use this item, try equipping it instead');
                     return false;
                 }
 
@@ -113,12 +69,12 @@ class Player extends Entity {
                         this.heal(item.power);
                         return true;
                     default:
-                        console.log(`Unknown item type ${item.type}.`);
+                        logger.write(`Unknown item type ${item.type}.`);
                         return false;
                 }
             }
         })
-        console.log(`Item with ID ${itemID} wasn't found.`);
+        logger.write(`Item with ID ${itemID} wasn't found.`);
         return false;
     }
 }
