@@ -155,7 +155,7 @@ export const parseAndExecute = (callingEntity: Entity, text: string): boolean =>
             const roomName = locator.find(callingEntity.name).name;
             logger.write(`You have entered ${roomName}`)
             break;
-            
+
         case 'examine':
             if (args.length === 0) {
                 logger.write(examine.execute(callingEntity));
@@ -169,15 +169,23 @@ export const parseAndExecute = (callingEntity: Entity, text: string): boolean =>
         case 'take':
             take.execute(callingEntity, args[0]);
             break;
-            
+
         case 'help':
             logger.write(help.execute());
             break;
-            
+
         default:
             logger.write(`Unknown command: ${command}`)
             return false;
 
     }
     return true;
+}
+
+export default {
+    parseAndExecute,
+    go,
+    examine,
+    take,
+    help,
 }

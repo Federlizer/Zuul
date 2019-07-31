@@ -1,8 +1,10 @@
 import Entity from '../models/Entity';
 import Room from '../models/Room';
 
+import logger from './logger';
+
 interface EntitiesList {
-    [entityID: string]: Room | undefined
+    [entity: Entity]: Room | undefined
 }
 
 let entitiesList: EntitiesList = {}
@@ -13,7 +15,7 @@ const follow = (entity: Entity, initialRoom: Room) => {
     })
 }
 
-const move = (entityID: string, direction: string): boolean => {
+const move = (entity: Entity, direction: string): boolean => {
     const currentRoom = entitiesList[entityID];
 
     // If no room is found, that means that the ID doens't exist in the entitiesList
@@ -27,6 +29,18 @@ const move = (entityID: string, direction: string): boolean => {
     }
 
     entitiesList[entityID] = nextRoom;
+    let enemies = [];
+
+    for (let entityID in entitiesList) {
+        const entityRoom = entitiesList[entityID];
+        if (
+            entityRoom !== undefined &&
+            entityRoom.name === nextRoom.name
+        ) {
+            
+        }
+    }
+
 
     return true;
 }

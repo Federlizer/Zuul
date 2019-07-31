@@ -43,31 +43,32 @@ class Battle {
         let entityOneTurn = true;
         let playingEntity = this.entityOne;
         let waitingEntity = this.entityTwo;
-        
+
         while(battling) {
             // Print battle info
             logger.write(this.battleInfo());
-            
+
             // Get entity action
             logger.write(`${playingEntity.name}'s turn.`)
 
-            const input = await logger.read('In battle> ');
-            let action: BattleAction | undefined;
+            //const input = await logger.read('In battle> ');
+            let action: BattleAction;
+            action = BattleAction.Attack;
 
-            switch (input) {
-                case 'attack':
-                    action = BattleAction.Attack;
-                    break;
-                case 'heal':
-                    action = BattleAction.Heal;
-                    break;
-                default:
-                    logger.write('Not a valid action, please try again...');
-            }
+            //switch (input) {
+            //case 'attack':
+            //action = BattleAction.Attack;
+            //break;
+            //case 'heal':
+            //action = BattleAction.Heal;
+            //break;
+            //default:
+            //logger.write('Not a valid action, please try again...');
+            //}
 
             if (action === undefined)
                 continue;
-            
+
             let entityPlayed = false;
 
             // Resolve entity action
@@ -83,10 +84,10 @@ class Battle {
                     }
                     break;
 
-                case BattleAction.Heal:
-                    this.executeHealAction(playingEntity);
-                    entityPlayed = true;
-                    break;
+                    //case BattleAction.Heal:
+                    //this.executeHealAction(playingEntity);
+                    //entityPlayed = true;
+                    //break;
 
                 default:
                     logger.write('Not a valid action, please try again...');

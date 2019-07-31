@@ -2,7 +2,7 @@ import Player from './models/Player';
 import logger from './controllers/logger';
 
 import map from './maps/original';
-import { parseAndExecute } from './commands';
+import commands from './commands';
 
 class Game {
     player: Player;
@@ -10,16 +10,14 @@ class Game {
     turn: number;
     playing: boolean;
 
-    constructor
-    (
-        sendOutputFunc?: (...output: Array<string>) => void
-    ) {
+    constructor(outFunc?: (...output: Array<string>) => void) {
+        //TODO: Inject this in the constructor instead.
         this.player = map.player;
         this.turn = 0;
         this.playing = false;
 
-        if (sendOutputFunc) {
-            logger.setOutput(sendOutputFunc);
+        if (outFunc) {
+            logger.setOutput(outFunc);
         }
     }
 
@@ -30,7 +28,7 @@ class Game {
 
     takeTurn(input: string): void {
         if (!this.playing) {
-            logger.write('You haven\'t started the game yet. Please do that first.');
+            throw new Error('Game is not started yet.');
             return;
         }
 
@@ -43,14 +41,14 @@ class Game {
             return;
         }
 
-        const executed = parseAndExecute(this.player, input);
+        const executed = commands.parseAndExecute(this.player, input);
 
         if (executed)
             this.turn += 1;
 
         if (map.isObjectiveCompleted()) {
             this.playing = false;
-            logger.write('You have won the game of Zuul. We hope you enjoyed the game.');
+            logger.write('You have won the game of Zuul. We hope you enjoyed it.');
         }
     }
 }
