@@ -1,5 +1,6 @@
 import Entity from '../models/Entity';
 import Room from '../models/Room';
+import Battle from '../battle/Battle';
 
 import logger from './logger';
 
@@ -43,6 +44,10 @@ const move = (entityID: string, direction: string): boolean => {
 
         if (room.name === nextRoom.name)
             enemies = [...enemies, entity];
+    })
+
+    enemies.map((enemy) => {
+        const battle = new Battle(enemy, findEntity(entityID));
     })
 
     return true;
