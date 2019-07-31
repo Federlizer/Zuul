@@ -19,7 +19,7 @@ const _examineItem = (item: Item): string => {
 }
 
 const _examineRoom = (entity: Entity): string => {
-    const currentRoom = locator.find(entity.name);
+    const currentRoom = locator.findRoom(entity.name);
 
     // praise our lord and saviour, the any type
     let items: Array<Item> = [];
@@ -80,7 +80,7 @@ export const examine: Command = {
 
             item = entity.bag.filter((i) => i.name === itemName)[0];
             if (!item) {
-                const currentRoom = locator.find(entity.name);
+                const currentRoom = locator.findRoom(entity.name);
                 currentRoom.items.filter((i) => i.name === itemName)[0];
 
                 if (!item) {
@@ -98,7 +98,7 @@ export const take: Command = {
     help: 'Take an item from the room you are in.',
     usage: 'take ITEM_NAME',
     execute: (entity: Entity, itemName: string) => {
-        const currentRoom = locator.find(entity.name);
+        const currentRoom = locator.findRoom(entity.name);
         const roomItems = currentRoom.items.filter((item) => {
             return item.name === itemName;
         })
@@ -152,7 +152,7 @@ export const parseAndExecute = (callingEntity: Entity, text: string): boolean =>
     switch (command) {
         case 'go':
             go.execute(callingEntity, args[0]);
-            const roomName = locator.find(callingEntity.name).name;
+            const roomName = locator.findRoom(callingEntity.name).name;
             logger.write(`You have entered ${roomName}`)
             break;
 

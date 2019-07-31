@@ -119,7 +119,7 @@ function isObjectiveCompleted(): boolean {
     return false;
   }
 
-    const currentRoom = locator.find(player.name);
+    const currentRoom = locator.findRoom(player.name);
     if (!currentRoom) {
         throw new Error('Player not being followed by locator')
     }
